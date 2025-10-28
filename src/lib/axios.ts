@@ -1,0 +1,55 @@
+"use server";
+
+import axios from "axios";
+import { env } from "./env";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
+};
+
+const axiosInstance = axios.create({
+  baseURL: env.BASE_URL,
+  headers,
+  timeout: 30_000,
+});
+
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    try {
+      const cookieStore = await cookies();
+      const token = cookieStore.get("access_token");
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${JSON.parse(token.value)}`;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      redirect("/login?code=401");
+    }
+
+    if (error.response.status === 403) {
+      return Promise.reject({ isForbidden: true });
+      // redirect("/unauthorized");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default axiosInstance;
