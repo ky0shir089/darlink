@@ -28,14 +28,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { menuShowType } from "@/data/menu";
 
 interface iAppProps {
-  id?: number;
-  data?: menuSchemaType;
+  data?: menuShowType;
   modules: { id: number; name: string }[];
 }
 
-const MenuForm = ({ id, data, modules }: iAppProps) => {
+const MenuForm = ({ data, modules }: iAppProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -53,8 +53,8 @@ const MenuForm = ({ id, data, modules }: iAppProps) => {
 
   function onSubmit(values: menuSchemaType) {
     startTransition(async () => {
-      const result = id
-        ? await menuUpdate(id, values)
+      const result = data?.id
+        ? await menuUpdate(data.id, values)
         : await menuStore(values);
 
       if (result.success) {
@@ -70,7 +70,7 @@ const MenuForm = ({ id, data, modules }: iAppProps) => {
     <Card>
       <CardHeader>
         <CardTitle className={cn("text-2xl")}>
-          {id ? "Edit" : "Create"} Menu
+          {data?.id ? "Edit" : "Create"} Menu
         </CardTitle>
       </CardHeader>
 
@@ -193,11 +193,11 @@ const MenuForm = ({ id, data, modules }: iAppProps) => {
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? (
                 <>
-                  {id ? "Updating..." : "Creating..."}{" "}
+                  {data?.id ? "Updating..." : "Creating..."}{" "}
                   <Loader2 className="animate-spin" />
                 </>
               ) : (
-                <>{id ? "Update" : "Create"}</>
+                <>{data?.id ? "Update" : "Create"}</>
               )}
             </Button>
           </form>

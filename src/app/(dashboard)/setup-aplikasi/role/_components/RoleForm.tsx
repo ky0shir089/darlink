@@ -29,22 +29,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { roleShowType } from "@/data/role";
 
 type RoleFormHook = UseFormReturn<roleSchemaType>;
 
-interface MenuPermissionType {
+interface MenuPermissionProps {
   id: number;
   name: string;
   permissions: { id: number; name: string }[];
 }
 
 interface iAppProps {
-  id?: number;
-  data?: roleSchemaType;
-  menuPermission: MenuPermissionType[];
+  data?: roleShowType;
+  menuPermission: MenuPermissionProps[];
 }
 
-const RoleForm = ({ id, data, menuPermission }: iAppProps) => {
+const RoleForm = ({ data, menuPermission }: iAppProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -60,8 +60,8 @@ const RoleForm = ({ id, data, menuPermission }: iAppProps) => {
 
   function onSubmit(values: roleSchemaType) {
     startTransition(async () => {
-      const result = id
-        ? await roleUpdate(id, values)
+      const result = data?.id
+        ? await roleUpdate(data?.id, values)
         : await roleStore(values);
 
       if (result.success) {
@@ -109,7 +109,7 @@ const RoleForm = ({ id, data, menuPermission }: iAppProps) => {
   );
 
   const MenuRow = React.memo(
-    ({ form, menu }: { form: RoleFormHook; menu: MenuPermissionType }) => {
+    ({ form, menu }: { form: RoleFormHook; menu: MenuPermissionProps }) => {
       const handleMenu = useCallback(
         (checked: boolean) => {
           const currentMenus = form.getValues("menus") || [];
@@ -169,7 +169,7 @@ const RoleForm = ({ id, data, menuPermission }: iAppProps) => {
     <Card>
       <CardHeader>
         <CardTitle className={cn("text-2xl")}>
-          {id ? "Edit" : "Create"} Role
+          {data?.id ? "Edit" : "Create"} Role
         </CardTitle>
       </CardHeader>
 
@@ -237,11 +237,11 @@ const RoleForm = ({ id, data, menuPermission }: iAppProps) => {
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? (
                 <>
-                  {id ? "Updating..." : "Creating..."}{" "}
+                  {data?.id ? "Updating..." : "Creating..."}{" "}
                   <Loader2 className="animate-spin" />
                 </>
               ) : (
-                <>{id ? "Update" : "Create"}</>
+                <>{data?.id ? "Update" : "Create"}</>
               )}
             </Button>
           </form>

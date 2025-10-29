@@ -39,12 +39,13 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+  const splitPathname = pathname.split("/");
+  const route = `/${splitPathname[1]}/${splitPathname[2]}`;
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
+        {items?.map((item) => (
           <Collapsible
             key={item.name}
             asChild
@@ -65,7 +66,7 @@ export function NavMain({
                     <SidebarMenuSubItem key={subItem.id}>
                       <SidebarMenuSubButton
                         asChild
-                        isActive={subItem.menu.url === pathname}
+                        isActive={subItem.menu.url === route}
                         className={cn(
                           "data-[active=true]:bg-primary/10 data-[active=true]:text-foreground"
                         )}

@@ -45,15 +45,14 @@ export type roleSchemaType = z.infer<typeof roleSchema>;
 
 export const userSchema = z.object({
   user_id: z.string().min(5),
-  name: z.string().optional(),
+  name: z.string().min(1),
   change_password: z.boolean(),
   role: z.object({ id: z.number().positive() }).optional(),
   role_id: z.number().positive(),
 });
 export type userSchemaType = z.infer<typeof userSchema>;
 
-export const updateProfileSchema = z.object({
-  name: z.string().optional(),
-  password: z.string().min(8),
+export const uploadSourceSchema = z.object({
+  file: z.union([z.instanceof(File), z.literal(""), z.null()]),
 });
-export type updateProfileSchemaType = z.infer<typeof updateProfileSchema>;
+export type uploadSourceSchemaType = z.infer<typeof uploadSourceSchema>;

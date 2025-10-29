@@ -5,6 +5,8 @@ import {
   changePasswordSchema,
   changePasswordSchemaType,
 } from "@/lib/formSchema";
+import { parseAxiosError } from "@/lib/parseAxiosError";
+import { success } from "zod";
 
 export async function changePassword(
   id: number,
@@ -14,20 +16,18 @@ export async function changePassword(
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       message: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .put(`/api/auth/v1/change-password/${id}`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-    return response
+  try {
+    const { data } = await axiosInstance.put(
+      `/auth/v1/change-password/${id}`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }

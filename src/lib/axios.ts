@@ -11,7 +11,8 @@ const headers = {
 };
 
 const axiosInstance = axios.create({
-  baseURL: env.BASE_URL,
+  baseURL: `${env.BASE_URL}/api`,
+  withCredentials: true,
   headers,
   timeout: 30_000,
 });
@@ -39,15 +40,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
-      redirect("/login?code=401");
-    }
-
-    if (error.response.status === 403) {
-      return Promise.reject({ isForbidden: true });
-      // redirect("/unauthorized");
-    }
-
     return Promise.reject(error);
   }
 );

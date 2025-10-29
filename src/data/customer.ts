@@ -4,9 +4,13 @@ import axiosInstance from "@/lib/axios";
 import { parseAxiosError } from "@/lib/parseAxiosError";
 import { notFound } from "next/navigation";
 
-export async function roleIndex(page: number, size: number, search?: string) {
+export async function customerIndex(
+  page: number,
+  size: number,
+  search?: string
+) {
   try {
-    const { data } = await axiosInstance.get(`/setup-aplikasi/v1/role`, {
+    const { data } = await axiosInstance.get(`/telemarketing/v1/customer`, {
       params: {
         page,
         size,
@@ -19,12 +23,14 @@ export async function roleIndex(page: number, size: number, search?: string) {
   }
 }
 
-export async function roleShow(id: number) {
+export async function customerShow(id: number) {
   try {
-    const { data } = await axiosInstance.get(`/setup-aplikasi/v1/role/${id}`);
+    const { data } = await axiosInstance.get(
+      `/telemarketing/v1/customer/${id}`
+    );
     return data;
   } catch (error) {
     return notFound();
   }
 }
-export type roleShowType = Awaited<ReturnType<typeof roleShow>>;
+export type customerShowType = Awaited<ReturnType<typeof customerShow>>;

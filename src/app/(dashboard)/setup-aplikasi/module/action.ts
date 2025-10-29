@@ -2,28 +2,27 @@
 
 import axiosInstance from "@/lib/axios";
 import { moduleSchema, moduleSchemaType } from "@/lib/formSchema";
+import { parseAxiosError } from "@/lib/parseAxiosError";
 
 export async function moduleStore(values: moduleSchemaType) {
   const validation = moduleSchema.safeParse(values);
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .post(`/api/setup-aplikasi/v1/module`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.post(
+      `/setup-aplikasi/v1/module`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }
 
 export async function moduleUpdate(id: number, values: moduleSchemaType) {
@@ -31,20 +30,18 @@ export async function moduleUpdate(id: number, values: moduleSchemaType) {
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .put(`/api/setup-aplikasi/v1/module/${id}`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.put(
+      `/setup-aplikasi/v1/module/${id}`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }

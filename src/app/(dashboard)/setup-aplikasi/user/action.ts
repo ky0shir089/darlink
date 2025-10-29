@@ -2,28 +2,27 @@
 
 import axiosInstance from "@/lib/axios";
 import { userSchema, userSchemaType } from "@/lib/formSchema";
+import { parseAxiosError } from "@/lib/parseAxiosError";
 
 export async function userStore(values: userSchemaType) {
   const validation = userSchema.safeParse(values);
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .post(`/api/setup-aplikasi/v1/user`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.post(
+      `/setup-aplikasi/v1/user`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }
 
 export async function userUpdate(id: number, values: userSchemaType) {
@@ -31,20 +30,18 @@ export async function userUpdate(id: number, values: userSchemaType) {
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .put(`/api/setup-aplikasi/v1/user/${id}`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.put(
+      `/setup-aplikasi/v1/user/${id}`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }

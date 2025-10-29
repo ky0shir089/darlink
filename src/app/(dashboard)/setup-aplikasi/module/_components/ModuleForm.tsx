@@ -20,13 +20,13 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { moduleSchema, moduleSchemaType } from "@/lib/formSchema";
 import { moduleStore, moduleUpdate } from "../action";
+import { moduleShowType } from "@/data/module";
 
 interface iAppProps {
-  id?: number;
-  data?: moduleSchemaType;
+  data?: moduleShowType;
 }
 
-const ModuleForm = ({ id, data }: iAppProps) => {
+const ModuleForm = ({ data }: iAppProps) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -41,10 +41,10 @@ const ModuleForm = ({ id, data }: iAppProps) => {
 
   function onSubmit(values: moduleSchemaType) {
     startTransition(async () => {
-      const result = id
-        ? await moduleUpdate(id, values)
+      const result = data?.id
+        ? await moduleUpdate(data?.id, values)
         : await moduleStore(values);
-        
+
       if (result.success) {
         toast.success(result.message);
         router.push("/setup-aplikasi/module");
@@ -58,7 +58,7 @@ const ModuleForm = ({ id, data }: iAppProps) => {
     <Card>
       <CardHeader>
         <CardTitle className={cn("text-2xl")}>
-          {id ? "Edit" : "Create"} Module
+          {data?.id ? "Edit" : "Create"} Module
         </CardTitle>
       </CardHeader>
 
@@ -116,11 +116,11 @@ const ModuleForm = ({ id, data }: iAppProps) => {
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? (
                 <>
-                  {id ? "Updating..." : "Creating..."}{" "}
+                  {data?.id ? "Updating..." : "Creating..."}{" "}
                   <Loader2 className="animate-spin" />
                 </>
               ) : (
-                <>{id ? "Update" : "Create"}</>
+                <>{data?.id ? "Update" : "Create"}</>
               )}
             </Button>
           </form>

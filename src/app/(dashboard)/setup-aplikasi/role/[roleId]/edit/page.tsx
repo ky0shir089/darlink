@@ -12,11 +12,9 @@ const EditRolePage = async ({ params }: { params: Params }) => {
     return <Unauthorized />;
   }
   const { data } = result;
-  const menuPermission = await selectMenuPermission();
+  const { data: menuPermission } = await selectMenuPermission();
 
-  return (
-    <RoleForm id={roleId} data={data} menuPermission={menuPermission.data} />
-  );
+  return <RoleForm data={data} menuPermission={menuPermission} />;
 };
 
 export default EditRolePage;
