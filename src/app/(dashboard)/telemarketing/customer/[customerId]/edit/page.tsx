@@ -4,7 +4,7 @@ import CustomerDetail from "../../_components/CustomerDetail";
 
 type Params = Promise<{ customerId: number }>;
 
-const EditcustomerPage = async ({ params }: { params: Params }) => {
+const EditCustomerPage = async ({ params }: { params: Params }) => {
   const { customerId } = await params;
   const result = await customerShow(customerId);
   if (result.isForbidden) {
@@ -15,4 +15,4 @@ const EditcustomerPage = async ({ params }: { params: Params }) => {
   return <CustomerDetail data={data} />;
 };
 
-export default EditcustomerPage;
+export default EditCustomerPage;
