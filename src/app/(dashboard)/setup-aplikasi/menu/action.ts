@@ -2,28 +2,27 @@
 
 import axiosInstance from "@/lib/axios";
 import { menuSchema, menuSchemaType } from "@/lib/formSchema";
+import { parseAxiosError } from "@/lib/parseAxiosError";
 
 export async function menuStore(values: menuSchemaType) {
   const validation = menuSchema.safeParse(values);
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .post(`/api/setup-aplikasi/v1/menu`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.post(
+      `/setup-aplikasi/v1/menu`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }
 
 export async function menuUpdate(id: number, values: menuSchemaType) {
@@ -31,20 +30,18 @@ export async function menuUpdate(id: number, values: menuSchemaType) {
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .put(`/api/setup-aplikasi/v1/menu/${id}`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.put(
+      `/setup-aplikasi/v1/menu/${id}`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }

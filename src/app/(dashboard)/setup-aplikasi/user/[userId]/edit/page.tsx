@@ -14,7 +14,7 @@ const EditUserPage = async ({ params }: { params: Params }) => {
   const { data } = result;
   const roles = await selectRole();
 
-  return <UserForm id={userId} data={data} roles={roles.data} />;
+  return <UserForm data={data} roles={roles.data} />;
 };
 
 export default EditUserPage;

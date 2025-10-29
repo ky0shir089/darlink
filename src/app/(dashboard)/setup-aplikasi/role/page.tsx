@@ -7,6 +7,7 @@ import { DataTableSkeleton } from "@/components/data-table-skeleton";
 import { roleIndex } from "@/data/role";
 import Unauthorized from "@/components/unauthorized";
 import SearchBox from "@/components/SearchBox";
+import { redirect } from "next/navigation";
 
 const RolePage = async (props: {
   searchParams?: Promise<{
@@ -21,6 +22,9 @@ const RolePage = async (props: {
   const size = Number(searchParams?.size) || 10;
 
   const result = await roleIndex(currentPage, size, query);
+  if (result.isUnauthorized) {
+    redirect("/login");
+  }
   if (result.isForbidden) {
     return <Unauthorized />;
   }

@@ -12,7 +12,7 @@ const EditModulePage = async ({ params }: { params: Params }) => {
   }
   const { data } = result;
 
-  return <ModuleForm id={moduleId} data={data} />;
+  return <ModuleForm data={data} />;
 };
 
 export default EditModulePage;

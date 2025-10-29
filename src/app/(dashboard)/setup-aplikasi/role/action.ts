@@ -2,28 +2,27 @@
 
 import axiosInstance from "@/lib/axios";
 import { roleSchema, roleSchemaType } from "@/lib/formSchema";
+import { parseAxiosError } from "@/lib/parseAxiosError";
 
 export async function roleStore(values: roleSchemaType) {
   const validation = roleSchema.safeParse(values);
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .post(`/api/setup-aplikasi/v1/role`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.post(
+      `/setup-aplikasi/v1/role`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }
 
 export async function roleUpdate(id: number, values: roleSchemaType) {
@@ -31,20 +30,18 @@ export async function roleUpdate(id: number, values: roleSchemaType) {
 
   if (!validation.success) {
     return {
-      status: false,
+      success: false,
       error: "invalid form data",
     };
   }
 
-  const response = await axiosInstance
-    .put(`/api/setup-aplikasi/v1/role/${id}`, values)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-
-  return response;
+  try {
+    const { data } = await axiosInstance.put(
+      `/setup-aplikasi/v1/role/${id}`,
+      values
+    );
+    return data;
+  } catch (error) {
+    return parseAxiosError(error);
+  }
 }

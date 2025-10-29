@@ -12,9 +12,9 @@ const EditMenuPage = async ({ params }: { params: Params }) => {
     return <Unauthorized />;
   }
   const { data } = result;
-  const modules = await selectModule();
+  const { data: modules } = await selectModule();
 
-  return <MenuForm id={menuId} data={data} modules={modules.data} />;
+  return <MenuForm data={data} modules={modules} />;
 };
 
 export default EditMenuPage;

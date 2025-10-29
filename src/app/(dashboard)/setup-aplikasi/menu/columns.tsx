@@ -1,21 +1,12 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
+import { menuShowType } from "@/data/menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ClipboardEdit } from "lucide-react";
 import Link from "next/link";
 
-export type Module = {
-  id: string;
-  name: string;
-  url: string;
-  position: number;
-  is_active: boolean;
-  slug: string;
-  module_id: number;
-};
-
-export const columns: ColumnDef<Module>[] = [
+export const columns: ColumnDef<menuShowType>[] = [
   {
     header: "ID",
     accessorKey: "id",
